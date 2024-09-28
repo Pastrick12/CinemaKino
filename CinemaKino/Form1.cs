@@ -30,7 +30,22 @@ namespace CinemaKino
 
                 string[] data = File.ReadAllLines("Archivos\\MOCK_DATA.csv");
 
-                var renglon = data[0].Split(',');
+                bool isHeader = true;
+
+                foreach (string line in data) 
+                {
+                    if (isHeader)
+                    {
+                        isHeader = false;
+                        continue;
+                    }
+                    var renglon = line.Split(',');
+
+                    Dato dato = new Dato();
+                    dato.FirstName = renglon[1];
+                }
+
+                
 
             }
             catch (Exception)
