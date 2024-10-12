@@ -1,10 +1,13 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace CinemaKino
 {
-    internal class Dato
+    public class Dato
     {
+        private readonly IMongoCollection<Dato> _datos;
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
@@ -47,7 +50,37 @@ namespace CinemaKino
 
         public Dato()
         {
-            string connectionString = "";
+            string connectionString = "mongodb://localhost:27017";
+
+            MongoClient client = new MongoClient(connectionString);
+            IMongoDatabase database = client.GetDatabase("cinemakino");
+            _datos = database.GetCollection<Dato>("datos");
+        }
+
+        public void Agregar(List<Dato> datos)
+        {
+            try
+            {
+                _datos.InsertMany(datos);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public Dato Obtener(string firstName)
+        {
+            try
+            {
+                return _datos.Find(x => x.FirstName == firstName).FirstOrDefault<Dato>();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }
