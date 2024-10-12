@@ -11,7 +11,8 @@ namespace CinemaKino
         {
             try
             {
-                LeerCSV();
+                List<Dato> datos = LeerCSV();
+                Insertar(datos);
             }
             catch (Exception ex)
             {
@@ -20,8 +21,37 @@ namespace CinemaKino
             }
 
         }
+        private void Insertar(List<Dato> datos)
+        {
+            try
+            {
+                Dato dato = new Dato();
+                dato.Agregar(datos);
+                MessageBox.Show("Datos agregados correctamente :D");
+            }
+            catch (Exception)
+            {
 
-        public void LeerCSV()
+                throw;
+            }
+        }
+        private void Busqueda()
+        {
+            try
+            {
+                Dato dato = new Dato();
+                dato = dato.Obtener("Joseito");
+
+                MessageBox.Show(dato.FirstName + dato.LastName);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public List<Dato> LeerCSV()
         {
             try
             {
@@ -72,6 +102,7 @@ namespace CinemaKino
 
                     datos.Add(dato);
                 }
+                return datos;
 
             }
             catch (Exception)
@@ -79,6 +110,11 @@ namespace CinemaKino
 
                 throw;
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Busqueda();
         }
     }
 }
