@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 namespace CinemaKino
 {
     public partial class Form1 : Form
@@ -11,7 +13,8 @@ namespace CinemaKino
         {
             try
             {
-                List<Dato> datos = LeerCSV();
+                //List<Dato> datos = LeerCSV();
+                List<Dato> datos = LeerTAB();
                 Insertar(datos);
             }
             catch (Exception ex)
@@ -51,14 +54,11 @@ namespace CinemaKino
             }
         }
 
-        public List<Dato> LeerCSV()
+        private List<Dato> LeerTexto(string archivo, string delimitador)
         {
             try
             {
-                // string data = File.ReadAllText("Archivos\\MOCK_DATA.csv");
-                //Como leer un archivo de texto
-
-                string[] data = File.ReadAllLines("Archivos\\MOCK_DATA.csv");
+                string[] data = File.ReadAllLines(archivo);
 
                 bool isHeader = true;
                 List<Dato> datos = new List<Dato>();
@@ -70,13 +70,7 @@ namespace CinemaKino
                         isHeader = false;
                         continue;
                     }
-                    var renglon = line.Split(',');
-
-                    /*Sintaxis anterior
-                    Dato dato = new Dato();
-                    dato.FirstName = renglon[1];
-                    dato.LastName = renglon[2];
-                    */
+                    var renglon = line.Split(delimitador);
 
                     DateOnly.TryParse(renglon[8], out DateOnly date);
                     TimeOnly.TryParse(renglon[9], out TimeOnly time);
@@ -111,6 +105,48 @@ namespace CinemaKino
                 throw;
             }
         }
+
+        public List<Dato> LeerCSV()
+        {
+            try
+            {
+                
+                string archivo = "Archivos\\MOCK_DATA.csv";
+                string delimitador = ",";
+                List<Dato> datos = LeerTexto(archivo, delimitador);
+
+
+                return datos;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public List<Dato> LeerTAB()
+        {
+            try
+            {
+
+                string archivo = "Archivos\\MOCK_DATA_TAB.txt";
+                string delimitador = "\t";
+                List<Dato> datos = LeerTexto(archivo, delimitador);
+
+
+                return datos;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
 
         private void button2_Click(object sender, EventArgs e)
         {
