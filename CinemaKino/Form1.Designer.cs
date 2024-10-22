@@ -31,6 +31,7 @@
             button1 = new Button();
             button2 = new Button();
             btnJson = new Button();
+            btnXml = new Button();
             SuspendLayout();
             // 
             // button1
@@ -65,11 +66,22 @@
             btnJson.UseVisualStyleBackColor = true;
             btnJson.Click += btnJson_Click;
             // 
+            // btnXml
+            // 
+            btnXml.Location = new Point(233, 204);
+            btnXml.Name = "btnXml";
+            btnXml.Size = new Size(75, 23);
+            btnXml.TabIndex = 3;
+            btnXml.Text = "XML";
+            btnXml.UseVisualStyleBackColor = true;
+            btnXml.Click += btnXml_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(560, 270);
+            Controls.Add(btnXml);
             Controls.Add(btnJson);
             Controls.Add(button2);
             Controls.Add(button1);
@@ -84,5 +96,6 @@
         private Button button1;
         private Button button2;
         private Button btnJson;
+        private Button btnXml;
     }
 }

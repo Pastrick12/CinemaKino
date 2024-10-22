@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Xml.Serialization;
 
 namespace CinemaKino
 {
@@ -185,6 +186,51 @@ namespace CinemaKino
                 throw;
             }
         }
+
+        private List<Dato> LeerXML()
+        {
+            try
+            {
+                string archivo = "Archivos\\MOCK_DATA.xml";
+                XmlSerializer serializer = new XmlSerializer(typeof(Dataset));
+
+                using (FileStream fs = new FileStream(archivo, FileMode.Open))
+                {
+                    var dataset = (Dataset)serializer.Deserialize(fs);
+
+                    List<Dato> datos = new List<Dato>();
+
+                    foreach (var record in dataset.Records)
+                    {
+                        Dato dato = new Dato
+                        {
+                            FirstName = record.FirstName,
+                            LastName = record.LastName,
+                            Email = record.Email,
+                            Phone = record.Phone,
+                            Gender = record.Gender,
+                            MovieGenres = record.MovieGenres,
+                            MovieTitle = record.MovieTitle,
+                            Date = DateOnly.Parse(record.Date),
+                            Time = TimeOnly.Parse(record.Time),
+                            Price = decimal.Parse(record.Price.Trim('$')),
+                            Seat = record.Seat,
+                            CinemaRoom = record.CinemaRoom
+                        };
+
+                        datos.Add(dato);
+                    }
+
+                    return datos;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al leer archivo XML: " + ex.Message);
+                throw;
+            }
+        }
+
         private void btnJson_Click(object sender, EventArgs e)
         {
             try
@@ -197,6 +243,22 @@ namespace CinemaKino
             catch (Exception ex)
             {
 
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnXml_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                List<Dato> datos = LeerXML();
+
+                Insertar(datos);
+
+                MessageBox.Show("Datos de XML agregados correctamente a MongoDB");
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show(ex.Message);
             }
         }
