@@ -1,10 +1,16 @@
+using MongoDB.Driver;
+using System.Data.SqlClient;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
+using CinemaKino.UserMigracion;
+using static CinemaKino.Form1;
+using CinemaKino.Usuario;
 
 namespace CinemaKino
 {
     public partial class Form1 : Form
     {
+        public Migracion migracion;
         public Form1()
         {
             InitializeComponent();
@@ -237,7 +243,7 @@ namespace CinemaKino
             {
                 //List<Dato> datos = LeerCSV();
                 List<Dato> datos = LeerJson();
-                //Insertar(datos);
+                Insertar(datos);
 
             }
             catch (Exception ex)
@@ -259,6 +265,63 @@ namespace CinemaKino
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
+            }
+
+
+        }
+
+
+
+        /*private async void Form1_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                var conexion = new Conexion();
+                var mongoCollection = conexion.GetMongoCollection();
+                var sqlConnection = await conexion.GetSqlConnectionAsync();
+
+                // Inicializar la instancia de Migracion
+                migracion = new Migracion(mongoCollection, sqlConnection);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al inicializar: {ex.Message}");
+            }
+        }*/
+
+
+
+        private async void btnMigrar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var conexion = new Conexion();
+                var mongoCollection = conexion.GetMongoCollection();
+                var sqlConnection = await conexion.GetSqlConnectionAsync();
+                // Inicializar la instancia de Migracion
+                migracion = new Migracion(mongoCollection, sqlConnection);
+                await migracion.MigrateUsersAsync(); // Llama al método de migración
+                MessageBox.Show("Migración completada exitosamente.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error en la migración: {ex.Message}");
+
+            }
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                List<Dato> datos = LeerCSV();
+                Insertar(datos);
+            }
+            catch (Exception ex)
+            {
+
                 MessageBox.Show(ex.Message);
             }
         }
